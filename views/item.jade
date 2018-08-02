@@ -1,0 +1,24 @@
+extends layout
+block content
+    h1 
+        | Single Item page!
+    .row
+        .col-sm-2
+        .col-sm-8
+          .grid-container
+            each row in res1
+             .item
+              h1 #{row.Name}
+              img.pimage(src="#{row.Image}", alt="#{row.Image}")
+              p Price: &euro;#{row.Price}
+              p Activity: #{row.Activity}
+              p If you click on me, I will disappear.
+              p Click me away!
+              p Click me too! 
+              a.button(href="/delete/#{row.Id}") Delete #{row.Name}
+              script.
+                $(document).ready(function(){
+                $("p").click(function(){
+                $(this).hide();
+                });
+                });

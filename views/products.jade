@@ -1,0 +1,19 @@
+extends ./layout.jade
+
+block content
+
+    h1 
+        | Products page!
+    .row
+        .col-sm-2
+        .col-sm-8
+            .grid-container
+                each row in res1
+                  p #{row.Name}
+                  img.pimage(src="#{row.Image}", alt="#{row.Image}")
+                  p Price: &euro;#{row.Price}
+                  p Activity: #{row.Activity}
+                  a.btn-default(href="/item/#{row.Id}", type='button') item
+                  a.btn-default(href="/show/#{row.Id}") Show
+                  a.button.btn-default(href="/edit/#{row.Id}") Edit Product
+                  a.button.btn-default(href="/delete/#{row.Id}") Delete #{row.Name}

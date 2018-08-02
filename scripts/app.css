@@ -1,0 +1,15 @@
+.main{
+    height: 400px ;
+    background-color: lavender;
+}
+.myform{
+    padding: 30px;
+}
+.pimage {
+    width: 150px; 
+    height: 100px;
+    margin-left: auto; 
+    margin-right: auto; 
+    display: block;
+    
+}

@@ -1,0 +1,33 @@
+doctype html
+html
+    head
+        block title
+            title Emer's App
+            link(rel='stylesheet', href='app.css', type='text/css')
+            link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+            script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+            script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    
+    body
+    
+        nav.navbar.navbar-inverse
+            .container-fluid
+                .navbar-header
+                    a.navbar-brand(href='#') Stuff Site!
+                ul.nav.navbar-nav
+                    li.active
+                        a(href='/') Home
+                    li
+                        a(href='/products') Products
+                    li
+                        a(href='/new-product') New Product
+                    li
+                        a(href='http://google.ie', target='_blank') Google
+        .main
+            .container
+            
+            block content
+        
+        footer.footer
+            .container
+                span.text-muted Place sticky footer content here but its not working | Emer made this in nodejs
