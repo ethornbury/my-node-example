@@ -14,15 +14,21 @@ I set a free mysql database in [Gearhost](http://gearhost.com) and the project l
 
 Use Workbench, set up a new connection with the details from Gearhost and view database locally.
 
-mkdir myapp
-cd myapp
-npm init
-	entry point: (index.js) change to app.js
-npm install express --save
-npm install mysql --save
-	need to use a mysql DB
-npm install jade
-	to use jade in your app
-npm install body-parser
-npm install node.date-time
-    to get time stamp for logger
+
+
+	$mkdir myapp
+	
+	$cd myapp
+	
+	$ npm init //set the entry point: (index.js) change to app.js
+
+	$npm install express --save
+	
+	$npm install mysql --save // as I am using a mysql DB
+
+	$npm install jade //to use jade in your app
+
+	$npm install body-parser
+
+	$npm install node.date-time //so I can use a timestamp in the log file
+    
