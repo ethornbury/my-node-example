@@ -13,7 +13,9 @@ block content
                   img.pimage(src="#{row.Image}", alt="#{row.Image}")
                   p Price: &euro;#{row.Price}
                   p Activity: #{row.Activity}
-                  a.btn-default(href="/item/#{row.Id}", type='button') item
-                  a.btn-default(href="/show/#{row.Id}") Show
-                  a.button.btn-default(href="/edit/#{row.Id}") Edit Product
-                  a.button.btn-default(href="/delete/#{row.Id}") Delete #{row.Name}
+                  a(href="/item/#{row.Id}", type='button')
+                    button(type="button") item
+                  a(href="/edit/#{row.Id}") 
+                    button(type="button") Edit Product
+                  a(href="/delete/#{row.Id}") 
+                    button(type="button") Delete #{row.Name}

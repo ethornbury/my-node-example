@@ -1,0 +1,14 @@
+Log file
+
+Example app listening on port 8080, in c9 goto http://<workspace name>-<user name>.c9users.io
+Connected to gearhost DB...8/3/2018, 8:52:44 PM
+all product listing 8/3/2018, 8:52:51 PM
+all product listing 8/3/2018, 8:54:52 PM
+all product listing 8/3/2018, 8:55:28 PM
+all product listing 8/3/2018, 8:56:15 PM
+all product listing 8/3/2018, 8:56:32 PM
+all product listing 8/3/2018, 8:58:01 PM
+product listed 19 8/3/2018, 8:58:04 PM
+product listed nuts-sml.jpg 8/3/2018, 8:58:04 PM
+product listed app.css 8/3/2018, 8:58:05 PM
+product edited 19 8/3/2018, 8:58:10 PM

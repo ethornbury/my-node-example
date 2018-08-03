@@ -1,7 +1,0 @@
-Hello world!
-Another line
-
-Connected to gearhost DB...8/2/2018, 6:53:31 PM
-all product listing 8/2/2018, 6:53:36 PM
-new product added time 53 8/2/2018, 6:53:47 PM
-all product listing 8/2/2018, 6:53:48 PM

@@ -1,6 +1,6 @@
 .main{
-    height: 400px ;
-    background-color: lavender;
+    min-height: 450px ;
+    /* background-color: lavender; */
 }
 .myform{
     padding: 30px;
@@ -12,4 +12,7 @@
     margin-right: auto; 
     display: block;
     
+}
+.footer{
+    margin-top: 15px;
 }

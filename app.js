@@ -8,9 +8,9 @@ var jade = require('jade');
 var fs = require('fs'); //file system, to access files like text, json, xml
 app.set('view engine', 'jade');
 
-var datetime = require('node.date-time');
-console.log('current: ' + new Date(Date.now()).toLocaleString());
-var wstream = fs.createWriteStream('myOutput.txt'); //create a log of activity with current timestamp
+var datetime = require('node.date-time'); //to get a current time stamp
+console.log('current: ' + new Date(Date.now()).toLocaleString()); //testing by sending current timestamp to console
+var wstream = fs.createWriteStream('logger.txt'); //create a log of activity with current timestamp in a file called logger.txt
 wstream.write('Log file\n');
 //wstream.end();
 
@@ -107,6 +107,29 @@ app.get('/item/:id', function(req, res){
  console.log("Now you are on the Individual product page!");
 });
 
+//edit a product
+app.get('/edit/:id', function(req, res){
+ let sql = 'SELECT * FROM products WHERE Id = "'+req.params.id+'";'
+ let query = db.query(sql, (err, res1) =>{
+  if(err) throw(err);
+  wstream.write('\nproduct edited ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
+  res.render('edit.jade', {root: VIEWS, res1}); // use the render command so that the response object renders a HHTML page
+ });
+ console.log("Now you are on the edit product page!");
+});
+
+
+// function to delete product data based on button press and form
+app.get('/delete/:id', function(req, res){
+ let sql = 'DELETE FROM products WHERE Id = "'+req.params.id+'";'
+ let query = db.query(sql, (err, res1) =>{
+  if(err) throw(err);
+  wstream.write('\nproduct deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
+  res.redirect('/products'); // use the render command so that the response object renders a HHTML page
+ });
+ console.log("Its Gone!");
+});
+
 
 //taking data from a form in the views - post request
 app.post('/new-user', function(req, res) {
@@ -169,5 +192,5 @@ b) the console statement is just a note to tell you the server is running
  */
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
-  //call this app from https://<workspace name>-<user name>.c9users.io
+  wstream.write('\nExample app listening on port 8080, in c9 goto http://<workspace name>-<user name>.c9users.io');
 });
