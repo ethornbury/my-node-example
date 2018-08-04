@@ -1,10 +1,11 @@
 extends ./layout.jade
 
 block content
-    h3 New product page!
-        .row
-            .col-sm-2
-            .col-sm-3
+     .row
+        .col-sm-1
+        .col-sm-2
+            h3 Add new product 
+        .col-sm-3
                 form(method="post" action="/new-product")
                     .form-group
                         label(for="Name") Product Name:

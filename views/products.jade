@@ -1,21 +1,21 @@
 extends ./layout.jade
 
 block content
-
-    h1 
-        | Products page!
-    .row
+ .row
+        .col-sm-1
+            
         .col-sm-2
-        .col-sm-8
+            h3 Products List
+        .col-sm-4
             .grid-container
                 each row in res1
-                  p #{row.Name}
+                  h3 #{row.Name}
                   img.pimage(src="#{row.Image}", alt="#{row.Image}")
                   p Price: &euro;#{row.Price}
                   p Activity: #{row.Activity}
+                  br
                   a(href="/item/#{row.Id}", type='button')
                     button(type="button") item
-                  a(href="/edit/#{row.Id}") 
-                    button(type="button") Edit Product
                   a(href="/delete/#{row.Id}") 
                     button(type="button") Delete #{row.Name}
+                  hr

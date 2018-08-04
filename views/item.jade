@@ -1,25 +1,28 @@
 extends layout
 block content
-    h1 
-        | Single Item page!
-    .row
+     .row
+        .col-sm-1
+            
         .col-sm-2
-        .col-sm-8
+            h3 View product 
+        .col-sm-3
           .grid-container
             each row in res1
-             .item
-              h1 #{row.Name}
+              h3 #{row.Name}
               img.pimage(src="#{row.Image}", alt="#{row.Name}")
               p Price: &euro;#{row.Price}
               p Activity: #{row.Activity}
-              p If you click on me, I will disappear.
-              p Click me away!
-              p Click me too! 
-              
+              br
               a(href="/edit/#{row.Id}") 
                     button(type="button") Edit Product #{row.Name}
               a(href="/delete/#{row.Id}") 
                 button(type="button") Delete #{row.Name}
+              hr
+              p If you click on me, I will disappear.
+              p Click me away!
+              p Click me too! 
+              
+              
               script.
                 $(document).ready(function(){
                 $("p").click(function(){
