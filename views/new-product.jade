@@ -5,7 +5,8 @@ block content
         .row
             .col-sm-2
             .col-sm-3
-                form(method="post" action="/new-product")
+                //form(method="post" action="/new-product")
+                form(method='post', enctype='multipart/form-data', action='/upload')
                     .form-group
                         label(for="Name") Product Name:
                         input.form-control(name="name", type="text", placeholder="enter a product name")
@@ -15,5 +16,8 @@ block content
                     .form-group
                         label(for="Image") Image:
                         input.form-control(name="image", type="text", placeholder="what image will this product have")
+                    .form-group
+                        input(type='file', name='file')
+                        input(type='submit', value='Submit')
                     button.btn.btn-default(type='submit') Create new thingy      
                

@@ -31,4 +31,7 @@ Use Workbench, set up a new connection with the details from Gearhost and view d
 	$npm install body-parser
 
 	$npm install node.date-time //so I can use a timestamp in the log file
+	
+	$npm install --save multer
+	
     

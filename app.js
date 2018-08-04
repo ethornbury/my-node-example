@@ -6,7 +6,11 @@ const VIEWS     = path.join(__dirname, 'views');
 var bodyParser  = require("body-parser");
 var jade        = require('jade');
 var fs          = require('fs');         //file system, to access files like text, json, xml
+var express = require('express')
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
 app.set('view engine', 'jade');
+
 
 var datetime = require('node.date-time');    //to get a current time stamp
 console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
@@ -41,6 +45,45 @@ db.connect((err) => {
     //console.log(new Date().format("d-M-Y"));  date stamp
   }
 });
+
+//error handle for image upload 
+const handleError = (err, res) => {
+  res
+    .status(500)
+    .contentType("text/plain")
+    .end("Oops! Something went wrong!");
+};
+
+//image upload
+app.get("/", express.static(path.join(__dirname, "./uploads")));
+app.post(
+  "/upload",
+  upload.single("Image" /* name attribute of <file> element in your form */),
+  (req, res) => {
+    const tempPath = req.file.path;
+    const targetPath = path.join(__dirname, "./uploads/image.jpg");
+
+    if (path.extname(req.file.originalname).toLowerCase() === ".jpg") {
+      fs.rename(tempPath, targetPath, err => {
+        if (err) return handleError(err, res);
+
+        res
+          .status(200)
+          .contentType("text/plain")
+          .end("File uploaded!");
+      });
+    } else {
+      fs.unlink(tempPath, err => {
+        if (err) return handleError(err, res);
+
+        res
+          .status(403)
+          .contentType("text/plain")
+          .end("Only .jpg files are allowed!");
+      });
+    }
+  }
+);
 
 
 // SQL create product table Example
