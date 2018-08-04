@@ -4,20 +4,20 @@ block content
         .row
             .col-sm-2
             .col-sm-3
-
-                form(method="post")
-                    .form-group
-                        label(for="newname") Product Name:
-                        input.form-control(name="newname", type="text", value="#{row.Name}")
-                    .form-group
-                        label(for="newprice") Price:
-                        input.form-control(name="newprice", type="text", value="#{row.Price}")
-                    .form-group
-                        label(for="newmage") Image:
-                        input.form-control(name="image", type="text", value="#{row.Image}")
-                    .form-group
-                        label(for="newactivity") Activity:
-                        input.form-control(name="newactivity", type="text", value="#{row.Activity}")   
-                    button.btn.btn-default(type='submit') Update thingy      
+                each row in res1
+                    form(method="post")
+                        .form-group
+                            label(for="newname") Product Name:
+                            input.form-control(name="newname", type="text", value='#{row.Name}')
+                        .form-group
+                            label(for="newprice") Price:
+                            input.form-control(name="newprice", type="text", value="#{row.Price}")
+                        .form-group
+                            label(for="newmage") Image:
+                            input.form-control(name="image", type="text", value="#{row.Image}")
+                        .form-group
+                            label(for="newactivity") Activity:
+                            input.form-control(name="newactivity", type="text", value="#{row.Activity}")   
+                        button.btn.btn-default(type='submit') Update thingy      
                
              

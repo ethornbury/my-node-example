@@ -9,13 +9,17 @@ block content
             each row in res1
              .item
               h1 #{row.Name}
-              img.pimage(src="#{row.Image}", alt="#{row.Image}")
+              img.pimage(src="#{row.Image}", alt="#{row.Name}")
               p Price: &euro;#{row.Price}
               p Activity: #{row.Activity}
               p If you click on me, I will disappear.
               p Click me away!
               p Click me too! 
-              a.button(href="/delete/#{row.Id}") Delete #{row.Name}
+              
+              a(href="/edit/#{row.Id}") 
+                    button(type="button") Edit Product #{row.Name}
+              a(href="/delete/#{row.Id}") 
+                button(type="button") Delete #{row.Name}
               script.
                 $(document).ready(function(){
                 $("p").click(function(){

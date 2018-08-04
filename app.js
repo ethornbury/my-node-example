@@ -1,22 +1,22 @@
 // Standard set up for the express code to work with your code
-var express = require('express');
-var app = express();
-const path = require('path');
-const VIEWS = path.join(__dirname, 'views');
-var bodyParser = require("body-parser");
-var jade = require('jade');
-var fs = require('fs'); //file system, to access files like text, json, xml
+var express     = require('express');
+var app         = express();
+const path      = require('path');
+const VIEWS     = path.join(__dirname, 'views');
+var bodyParser  = require("body-parser");
+var jade        = require('jade');
+var fs          = require('fs');         //file system, to access files like text, json, xml
 app.set('view engine', 'jade');
 
-var datetime = require('node.date-time'); //to get a current time stamp
-console.log('current: ' + new Date(Date.now()).toLocaleString()); //testing by sending current timestamp to console
-var wstream = fs.createWriteStream('logger.txt'); //create a log of activity with current timestamp in a file called logger.txt
+var datetime = require('node.date-time');    //to get a current time stamp
+console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
+var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
 wstream.write('Log file\n');
 //wstream.end();
 
-app.use(express.static("scripts")); // allow the application to access the scripts folder contents to use in the application
-app.use(express.static("images")); // allow the application to access the images folder contents to use in the application
-app.use(express.static("views")); // Allow access to content of views folder
+app.use(express.static("scripts"));  // allow the application to access the scripts folder contents to use in the application
+app.use(express.static("images"));   // allow the application to access the images folder contents to use in the application
+app.use(express.static("views"));    // Allow access to content of views folder
 
 app.use(bodyParser.urlencoded({extended:true})); //place in general that which uses it
 
@@ -45,9 +45,8 @@ db.connect((err) => {
 
 // SQL create product table Example
 app.get('/create-products-table', function(req, res) {
-  //let sql = 'DROP TABLE products;';
-
-  let sql = 'CREATE TABLE products ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Name varchar(255), Price int, Image varchar(255), Activity varchar(255));'
+  //let sql = 'DROP TABLE products;'
+  let sql = 'CREATE TABLE products ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Name varchar(255), Price int, Image varchar(255), Activity varchar(255));';
     let query = db.query(sql, (err, res) => {
       if(err) throw err;
        console.log(res);
@@ -58,9 +57,9 @@ app.get('/create-products-table', function(req, res) {
 
 // SQL create product table Example
 app.get('/create-users-table', function(req, res) {
-  //let sql = 'DROP TABLE users;';
+  //let sql = 'DROP TABLE users;'
 
-  let sql = 'CREATE TABLE users ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Fname varchar(255), Lname varchar(255), Email varchar(255) NOT NULL, Password varchar(50) NOT NULL);'
+  let sql = 'CREATE TABLE users ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Fname varchar(255), Lname varchar(255), Email varchar(255) NOT NULL, Password varchar(50) NOT NULL);';
     let query = db.query(sql, (err, res) => {
       if(err) throw err;
        console.log(res);
@@ -70,7 +69,7 @@ app.get('/create-users-table', function(req, res) {
 
 //taking data from a form in the views - post request
 app.post('/new-product', function(req, res) {
-  let sql = 'INSERT INTO products ( Name, Price, Image, Activity) VALUES ("'+req.body.name+'", "'+req.body.price+'", "'+req.body.image+'", "'+req.body.activity+'")'; 
+  let sql = 'INSERT INTO products ( Name, Price, Image, Activity) VALUES ("'+req.body.name+'", "'+req.body.price+'", "'+req.body.image+'", "'+req.body.activity+'")';
   let query = db.query(sql, (err, res) => {
     if(err) throw err;
     console.log(res);
@@ -109,19 +108,31 @@ app.get('/item/:id', function(req, res){
 
 //edit a product
 app.get('/edit/:id', function(req, res){
- let sql = 'SELECT * FROM products WHERE Id = "'+req.params.id+'";'
+ let sql = 'SELECT * FROM products WHERE Id = "'+req.params.id+'";';
+ console.log(req.params.id);
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
-  wstream.write('\nproduct edited ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.render('edit.jade', {root: VIEWS, res1}); // use the render command so that the response object renders a HHTML page
+  wstream.write('\nproduct edit page ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
+  res.render('edit', {root: VIEWS, res1});// use the render command so that the response object renders a HHTML page
  });
  console.log("Now you are on the edit product page!");
+});
+
+//take the data from the form to the database
+app.post('/edit/:id', function(req, res){
+    let sql = 'UPDATE products SET Name = "'+req.body.newname+'", Price = "'+req.body.newprice+'", Activity = "'+req.body.newactivity+'", Image = "'+req.body.newimage+'" WHERE Id = "'+req.params.id+'";';
+        let query = db.query(sql, (err, res) =>{
+             if(err) throw err;
+             console.log(res);
+        });
+        wstream.write('\nproduct edited ' + req.body.newname + ' ' + new Date(Date.now()).toLocaleString());
+    res.redirect("/item/" + req.params.id);
 });
 
 
 // function to delete product data based on button press and form
 app.get('/delete/:id', function(req, res){
- let sql = 'DELETE FROM products WHERE Id = "'+req.params.id+'";'
+ let sql = 'DELETE FROM products WHERE Id = "'+req.params.id+'";';
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nproduct deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
@@ -133,7 +144,7 @@ app.get('/delete/:id', function(req, res){
 
 //taking data from a form in the views - post request
 app.post('/new-user', function(req, res) {
-  let sql = 'INSERT INTO users ( Fname, Lname, Email, Password) VALUES ("'+req.body.fname+'", "'+req.body.lname+'", "'+req.body.email+'", "'+req.body.password+'")'; 
+  let sql = 'INSERT INTO users ( Fname, Lname, Email, Password) VALUES ("'+req.body.fname+'", "'+req.body.lname+'", "'+req.body.email+'", "'+req.body.password+'")';
   let query = db.query(sql, (err, res) => {
     if(err) throw err;
     console.log(res);
@@ -152,7 +163,7 @@ in the "/" directory, create a dynamic html and send that back
 */
 
 app.get('/', function (req, res) {
-    res.render('index.jade', {root: VIEWS}); 
+    res.render('index.jade', {root: VIEWS});
   //res.send("<h1>hello world</h1>"); //it will pring this onscreen
   console.log("app working"); //this message will be displayed in the console
 });
@@ -174,7 +185,7 @@ app.get('/products', function(req, res){
 
 // function to render the products page
 app.get('/new-product', function(req, res){
-  res.render('new-product.jade', {root: VIEWS}); // use the render command so that the response object renders a HHTML page
+  res.render('new-product.jade', {root: VIEWS});  // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the new product page!");
 });
 
