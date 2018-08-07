@@ -5,18 +5,20 @@ block content
             
         .col-sm-2
             h3 View product 
-        .col-sm-3
+        .col-sm-4
           .grid-container
             each row in res1
               h3 #{row.Name}
-              img.pimage(src="#{row.Image}", alt="#{row.Name}")
+              img.pimage(src="../#{row.Image}", alt="#{row.Name}")
               p Price: &euro;#{row.Price}
               p Activity: #{row.Activity}
               br
               a(href="/edit/#{row.Id}") 
-                    button(type="button") Edit Product #{row.Name}
+                    button(type="button") Edit #{row.Name}
               a(href="/delete/#{row.Id}") 
                 button(type="button") Delete #{row.Name}
+              a(href="/products") 
+                button(type="button") Products Listing
               hr
               p If you click on me, I will disappear.
               p Click me away!

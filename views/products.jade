@@ -10,12 +10,13 @@ block content
             .grid-container
                 each row in res1
                   h3 #{row.Name}
-                  img.pimage(src="#{row.Image}", alt="#{row.Image}")
+                  img(src="#{row.Image}", alt="#{row.Image}")
+
                   p Price: &euro;#{row.Price}
                   p Activity: #{row.Activity}
                   br
                   a(href="/item/#{row.Id}", type='button')
-                    button(type="button") item
+                    button(type="button") Show item
                   a(href="/delete/#{row.Id}") 
                     button(type="button") Delete #{row.Name}
                   hr
