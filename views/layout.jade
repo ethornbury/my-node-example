@@ -23,6 +23,12 @@ html
                         a(href='/new-product') New Product
                     li
                         a(href='http://google.ie', target='_blank') Google
+                    li.search
+                        form(method="post" action="search")
+                            label(for="search") &emsp;
+                            input(name="search", type="text", Placeholder="Search for....") 
+                            button.button(type="submit") Search
+                
         .main
             .container
             
@@ -30,4 +36,5 @@ html
         
         footer.footer
             .container
-                span.text-muted Place sticky footer content here but its not working | Emer made this in nodejs
+                span.text-muted.page-footer Place sticky footer content here but its not working | Emer made this in nodejs
+                

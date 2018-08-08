@@ -154,6 +154,21 @@ app.post('/new-user', function(req, res) {
   console.log("Now you are on the home page!");
 });
 
+// Search function 
+app.post('/search', function(req, res){
+ let sql = 'SELECT * FROM products WHERE name LIKE "%'+req.body.search+'%";';
+ let query = db.query(sql, (err,res1) =>{
+  if(err) throw(err);
+ // res.redirect("/error")
+  res.render('products', {root: VIEWS, res1});
+  console.log("Search for " + "%'+req.body.search+'%");
+  wstream.write("Search for " + "%'+req.body.search+'%" + " at " +  + new Date(Date.now()).toLocaleString());
+ });
+
+ 
+});
+
+// end search function
 
 /*
 Routes a get request, and in this simple case - to the server's root. It sends a 
