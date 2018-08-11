@@ -1,5 +1,23 @@
 extends ./layout.jade
 
 block content
-
-    h1 | Hi Add new user page!
+     .row
+        .col-sm-1
+        .col-sm-2
+            h3 Add new user 
+        .col-sm-3
+                form(method="post" action="/new-user")
+                    .form-group
+                        label(for="Fname") Firstame:
+                        input.form-control(name="fname", type="text", placeholder="enter firstname")
+                    .form-group
+                        label(for="Lname") Surame:
+                        input.form-control(name="lname", type="text", placeholder="enter surname")
+                    .form-group
+                        label(for="Email") Email:
+                        input.form-control(name="email", type="text", placeholder="enter email")
+                    .form-group
+                        label(for="Password") Password:
+                        input.form-control(name="password", type="text", placeholder="enter a password")
+                    button.btn.btn-default(type='submit') Create new user      
+               

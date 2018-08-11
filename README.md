@@ -10,11 +10,6 @@ To set up the environment
     
     $npm install body-parser
     
-I set a free mysql database in [Gearhost](http://gearhost.com) and the project links to it.
-
-Use Workbench, set up a new connection with the details from Gearhost and view database locally.
-
-
 
 	$mkdir myapp
 	
@@ -31,4 +26,16 @@ Use Workbench, set up a new connection with the details from Gearhost and view d
 	$npm install body-parser
 
 	$npm install node.date-time //so I can use a timestamp in the log file
-    
+
+
+I set a free mysql database in [Gearhost](http://gearhost.com) and the project links to it.
+Use Workbench, set up a new connection with the details from Gearhost and view database locally.
+
+Functionality includes:
+- create tables for items, users
+- CRUD for items
+- CRUD for users
+- CRUD the reviews in JSON
+- Uses a view engine with block content
+- log file of activity created
+

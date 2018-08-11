@@ -1,0 +1,20 @@
+extends ./layout.jade
+
+block content
+     .row
+        .col-sm-1
+        .col-sm-2
+            h3 Add new product 
+        .col-sm-3
+                form(method="post" action="/new-product")
+                    .form-group
+                        label(for="Name") Product Name:
+                        input.form-control(name="name", type="text", placeholder="enter a product name")
+                    .form-group
+                        label(for="Price") Price:
+                        input.form-control(name="price", type="text", placeholder="enter a selling price")
+                    .form-group
+                        label(for="Image") Image:
+                        input.form-control(name="image", type="text", placeholder="what image will this product have")
+                    button.btn.btn-default(type='submit') Create new thingy      
+               

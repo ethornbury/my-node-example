@@ -8,15 +8,23 @@ var jade        = require('jade');
 var fs          = require('fs');         //file system, to access files like text, json, xml
 app.set('view engine', 'jade');
 
-var datetime = require('node.date-time');    //to get a current time stamp
+//var datetime = require('node.date-time');    //to get a current time stamp but did it the other way
 console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
 var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
 wstream.write('Log file\n');
 //wstream.end();
 
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(session({ secret: "topsecret" })); // Requird to make the session accessable throughouty the application
+
+
 app.use(express.static("scripts"));  // allow the application to access the scripts folder contents to use in the application
 app.use(express.static("images"));   // allow the application to access the images folder contents to use in the application
 app.use(express.static("views"));    // Allow access to content of views folder
+app.use(express.static("models"));   // Allow access to content of models folder where JSON is
+app.use(express.static("views/user"));
 
 app.use(bodyParser.urlencoded({extended:true})); //place in general that which uses it
 
@@ -141,20 +149,7 @@ app.get('/delete/:id', function(req, res){
  console.log("Its Gone!");
 });
 
-
-//taking data from a form in the views - post request
-app.post('/new-user', function(req, res) {
-  let sql = 'INSERT INTO users ( Fname, Lname, Email, Password) VALUES ("'+req.body.fname+'", "'+req.body.lname+'", "'+req.body.email+'", "'+req.body.password+'")';
-  let query = db.query(sql, (err, res) => {
-    if(err) throw err;
-    console.log(res);
-  });
-  //res.send("Well done, new user created...");
-  res.render('index.jade', {root: VIEWS}); // use the render command so that the response object renders a HHTML page
-  console.log("Now you are on the home page!");
-});
-
-// Search function 
+// Search products table function 
 app.post('/search', function(req, res){
  let sql = 'SELECT * FROM products WHERE name LIKE "%'+req.body.search+'%";';
  let query = db.query(sql, (err,res1) =>{
@@ -164,11 +159,73 @@ app.post('/search', function(req, res){
   console.log("Search for " + "%'+req.body.search+'%");
   wstream.write("Search for " + "%'+req.body.search+'%" + " at " +  + new Date(Date.now()).toLocaleString());
  });
-
- 
 });
 
 // end search function
+
+//-----USER
+//taking data from a form in the views - post request
+app.post('new-user', function(req, res) {
+  let sql = 'INSERT INTO users ( Fname, Lname, Email, Password) VALUES ("'+req.body.fname+'", "'+req.body.lname+'", "'+req.body.email+'", "'+req.body.password+'")';
+  let query = db.query(sql, (err, res) => {
+    if(err) throw err;
+    console.log(res);
+    wstream.write('\nuser created ' + req.body.lname + ' ' + new Date(Date.now()).toLocaleString());
+  });
+  //res.send("Well done, new user created...");
+  res.render('index.jade', {root: VIEWS}); // use the render command so that the response object renders a HHTML page
+  console.log("Now you are on the home page!");
+});
+
+//edit a USER
+app.get('/edit/:id', function(req, res){
+ let sql = 'SELECT * FROM users WHERE Id = "'+req.params.id+'";';
+ console.log(req.params.id);
+ let query = db.query(sql, (err, res1) =>{
+  if(err) throw(err);
+  wstream.write('\nuser edit page ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
+  res.render('../user/edit', {root: VIEWS, res1});// use the render command so that the response object renders a HHTML page
+ });
+ console.log("Now you are on the edit user page!");
+});
+
+//take the USER data from the form to the database
+app.post('/edit/:id', function(req, res){
+    let sql = 'UPDATE user SET Name = "'+req.body.newname+'", Email = "'+req.body.newprice+'", Password = "'+req.body.newactivity+'" WHERE Id = "'+req.params.id+'";';
+        let query = db.query(sql, (err, res) =>{
+             if(err) throw err;
+             console.log(res);
+        });
+        wstream.write('\nuser edited ' + req.body.newname + ' ' + new Date(Date.now()).toLocaleString());
+    res.redirect("/user/" + req.params.id);
+});
+
+
+// function to delete USER data based on button press and form
+app.get('/delete/:id', function(req, res){
+ let sql = 'DELETE FROM products WHERE Id = "'+req.params.id+'";';
+ let query = db.query(sql, (err, res1) =>{
+  if(err) throw(err);
+  wstream.write('\nuser deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
+  res.redirect('/users'); // use the render command so that the response object renders a HHTML page
+ });
+ console.log("Its Gone!");
+});
+
+// Search USER table function 
+app.post('/search', function(req, res){
+ let sql = 'SELECT * FROM users WHERE name LIKE "%'+req.body.search+'%";';
+ let query = db.query(sql, (err,res1) =>{
+  if(err) throw(err);
+ // res.redirect("/error")
+  res.render('users', {root: VIEWS, res1});
+  console.log("Search for user " + "%'+req.body.search+'%");
+  wstream.write("Search for user " + "%'+req.body.search+'%" + " at " +  + new Date(Date.now()).toLocaleString());
+ });
+});
+
+// end search function
+
 
 /*
 Routes a get request, and in this simple case - to the server's root. It sends a 

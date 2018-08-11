@@ -1,0 +1,25 @@
+extends layout
+block content
+     .row
+        .col-sm-1
+            
+        .col-sm-2
+            h3 View user 
+        .col-sm-4
+          .grid-container
+            each row in res1
+              h3 #{row.Lname}
+              //img.pimage(src="../#{row.Image}", alt="#{row.Name}")
+              //img(style='width: 200px; height: 150px:', src="../#{row.Image}", alt="#{row.Name}")
+              p Firstname: #{row.Fname}
+              p Surname: #{row.Lname}
+              p Email: #{row.Email}
+             
+              br
+              a(href="/edit/#{row.Id}") 
+                    button(type="button") Edit #{row.Name}
+              a(href="/delete/#{row.Id}") 
+                button(type="button") Delete #{row.Name}
+              a(href="/products") 
+                button(type="button") Users Listing
+              hr
