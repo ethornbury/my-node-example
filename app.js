@@ -75,6 +75,7 @@ app.get('/create-users-table', function(req, res) {
     res.send("Well done users table created...");
 });
 
+//--------------PRODUCT CRUD
 //taking data from a form in the views - post request
 app.post('/new-product', function(req, res) {
   let sql = 'INSERT INTO products ( Name, Price, Image, Activity) VALUES ("'+req.body.name+'", "'+req.body.price+'", "'+req.body.image+'", "'+req.body.activity+'")';
@@ -115,19 +116,19 @@ app.get('/item/:id', function(req, res){
 });
 
 //edit a product
-app.get('/edit/:id', function(req, res){
+app.get('/edit-product/:id', function(req, res){
  let sql = 'SELECT * FROM products WHERE Id = "'+req.params.id+'";';
  console.log(req.params.id);
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nproduct edit page ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.render('edit', {root: VIEWS, res1});// use the render command so that the response object renders a HHTML page
+  res.render('edit-product', {root: VIEWS, res1});// use the render command so that the response object renders a HHTML page
  });
  console.log("Now you are on the edit product page!");
 });
 
 //take the data from the form to the database
-app.post('/edit/:id', function(req, res){
+app.post('/edit-product/:id', function(req, res){
     let sql = 'UPDATE products SET Name = "'+req.body.newname+'", Price = "'+req.body.newprice+'", Activity = "'+req.body.newactivity+'", Image = "'+req.body.newimage+'" WHERE Id = "'+req.params.id+'";';
         let query = db.query(sql, (err, res) =>{
              if(err) throw err;
@@ -177,21 +178,35 @@ app.post('new-user', function(req, res) {
   console.log("Now you are on the home page!");
 });
 
-//edit a USER
-app.get('/edit/:id', function(req, res){
+app.get('/users', function(req, res){
+ let sql = 'SELECT * FROM users';
+ let query = db.query(sql, (err, res1) => {
+    if(err) throw err;
+    res.render('users.jade', {root: VIEWS, res1});
+    //res.send(res1); //showa table contents but needs style
+    console.log(res1);
+     wstream.write('\nall users listing ' + new Date(Date.now()).toLocaleString());
+  });
+  //console.log("Now you are on the products page! Session set as seen on products page " + req.session.email);
+  console.log("Now you are on the users page! ");
+});
+
+
+//view a USER
+app.get('/user/:id', function(req, res){
  let sql = 'SELECT * FROM users WHERE Id = "'+req.params.id+'";';
  console.log(req.params.id);
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nuser edit page ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.render('../user/edit', {root: VIEWS, res1});// use the render command so that the response object renders a HHTML page
+  res.render('user.jade', {root: VIEWS, res1});// use the render command so that the response object renders a HHTML page
  });
  console.log("Now you are on the edit user page!");
 });
 
 //take the USER data from the form to the database
-app.post('/edit/:id', function(req, res){
-    let sql = 'UPDATE user SET Name = "'+req.body.newname+'", Email = "'+req.body.newprice+'", Password = "'+req.body.newactivity+'" WHERE Id = "'+req.params.id+'";';
+app.post('/edit-user/:id', function(req, res){
+    let sql = 'UPDATE user SET Name = "'+req.body.fname+'", Surname = "'+req.body.lname+'",Email = "'+req.body.email+'", Password = "'+req.body.password+'" WHERE Id = "'+req.params.id+'";';
         let query = db.query(sql, (err, res) =>{
              if(err) throw err;
              console.log(res);
@@ -202,18 +217,18 @@ app.post('/edit/:id', function(req, res){
 
 
 // function to delete USER data based on button press and form
-app.get('/delete/:id', function(req, res){
- let sql = 'DELETE FROM products WHERE Id = "'+req.params.id+'";';
+app.get('/delete-user/:id', function(req, res){
+ let sql = 'DELETE FROM users WHERE Id = "'+req.params.id+'";';
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nuser deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
   res.redirect('/users'); // use the render command so that the response object renders a HHTML page
  });
- console.log("Its Gone!");
+ console.log("User Gone!");
 });
 
 // Search USER table function 
-app.post('/search', function(req, res){
+app.post('/search-user', function(req, res){
  let sql = 'SELECT * FROM users WHERE name LIKE "%'+req.body.search+'%";';
  let query = db.query(sql, (err,res1) =>{
   if(err) throw(err);
@@ -234,16 +249,10 @@ to send a hello world string. But in theory you can do something with the req va
 in the "/" directory, create a dynamic html and send that back
 */
 
-app.get('/', function (req, res) {
-    res.render('index.jade', {root: VIEWS});
-  //res.send("<h1>hello world</h1>"); //it will pring this onscreen
-  console.log("app working"); //this message will be displayed in the console
-});
-
-//------------------
 // function to render the home page
 app.get('/', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
+ //res.send("<h1>hello world</h1>"); //it will pring this onscreen
   res.render('index.jade', {root: VIEWS}); //render() will show the .jade as HTML
   console.log("Now you are on the home page!");
 });
@@ -265,6 +274,13 @@ app.get('/new-product', function(req, res){
 app.get('/new-user', function(req, res){
   res.render('new-user.jade', {root: VIEWS}); // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the new user page!");
+});
+
+// function to render the users page
+app.get('/users', function(req, res){
+ // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
+  res.render('users.jade', {root: VIEWS}); // use the render command so that the response object renders as a HTML page
+  console.log("Now you are on the users listing page!");
 });
 
 /*

@@ -14,7 +14,7 @@ block content
               p Price: &euro;#{row.Price}
               p Activity: #{row.Activity}
               br
-              a(href="/edit/#{row.Id}") 
+              a(href="/edit-product/#{row.Id}") 
                     button(type="button") Edit #{row.Name}
               a(href="/delete/#{row.Id}") 
                 button(type="button") Delete #{row.Name}

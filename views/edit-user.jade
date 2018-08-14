@@ -1,0 +1,26 @@
+extends layout
+block content
+    .row
+        .col-sm-1
+            
+        .col-sm-2
+            h3 Edit User profile
+        .col-sm-3
+            each row in res1
+                form(method="post")
+                    .form-group
+                        label(for="newfname") Name:
+                        input.form-control(name="newfname", type="text", value='#{row.Fname}')
+                    .form-group
+                        label(for="newlname") Surname:
+                        input.form-control(name="newlname", type="text", value="#{row.Lname}")
+                    .form-group
+                        label(for="newemail") Email:
+                        input.form-control(name="newemail", type="text", value="#{row.Email}")
+                    .form-group
+                        label(for="newpassword") Email:
+                        input.form-control(name="newpassword", type="password", value="#{row.Password}")
+                    
+                    button.btn.btn-default(type='submit') Update thingy      
+           
+             

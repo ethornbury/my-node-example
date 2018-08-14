@@ -16,10 +16,10 @@ block content
               p Email: #{row.Email}
              
               br
-              a(href="/edit/#{row.Id}") 
+              a(href="/edit-user/#{row.Id}") 
                     button(type="button") Edit #{row.Name}
-              a(href="/delete/#{row.Id}") 
+              a(href="/delete-user/#{row.Id}") 
                 button(type="button") Delete #{row.Name}
-              a(href="/products") 
+              a(href="/users") 
                 button(type="button") Users Listing
               hr
