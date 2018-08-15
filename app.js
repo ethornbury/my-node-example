@@ -63,17 +63,6 @@ app.get('/create-products-table', function(req, res) {
     res.send("Well done products table created...");
 });
 
-// SQL create product table Example
-app.get('/create-users-table', function(req, res) {
-  //let sql = 'DROP TABLE users;'
-
-  let sql = 'CREATE TABLE users ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Fname varchar(255), Lname varchar(255), Email varchar(255) NOT NULL, Password varchar(50) NOT NULL);';
-    let query = db.query(sql, (err, res) => {
-      if(err) throw err;
-       console.log(res);
-      });
-    res.send("Well done users table created...");
-});
 
 //--------------PRODUCT CRUD
 //taking data from a form in the views - post request
@@ -165,8 +154,20 @@ app.post('/search', function(req, res){
 // end search function
 
 //-----USER
+// SQL create product table Example
+app.get('/create-users-table', function(req, res) {
+  //let sql = 'DROP TABLE users;'
+
+  let sql = 'CREATE TABLE users ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Fname varchar(255), Lname varchar(255), Email varchar(255) NOT NULL, Password varchar(50) NOT NULL);';
+    let query = db.query(sql, (err, res) => {
+      if(err) throw err;
+       console.log(res);
+      });
+    res.send("Well done users table created...");
+});
+
 //taking data from a form in the views - post request
-app.post('new-user', function(req, res) {
+app.post('/new-user', function(req, res) {
   let sql = 'INSERT INTO users ( Fname, Lname, Email, Password) VALUES ("'+req.body.fname+'", "'+req.body.lname+'", "'+req.body.email+'", "'+req.body.password+'")';
   let query = db.query(sql, (err, res) => {
     if(err) throw err;
@@ -253,7 +254,7 @@ in the "/" directory, create a dynamic html and send that back
 app.get('/', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
  //res.send("<h1>hello world</h1>"); //it will pring this onscreen
-  res.render('index.jade', {root: VIEWS}); //render() will show the .jade as HTML
+  res.render('index.jade', {root: VIEWS, title: 'Homepage'}); //render() will show the .jade as HTML
   console.log("Now you are on the home page!");
 });
 

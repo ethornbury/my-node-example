@@ -1,12 +1,5 @@
 Log file
 
 Example app listening on port 8080, in c9 goto http://<workspace name>-<user name>.c9users.io
-Connected to gearhost DB...8/14/2018, 8:03:41 PM
-all product listing 8/14/2018, 8:03:48 PM
-product listed 22 8/14/2018, 8:03:50 PM
-product listed app.css 8/14/2018, 8:03:50 PM
-product edit page 22 8/14/2018, 8:03:56 PM
-product edit page app.css 8/14/2018, 8:03:57 PM
-product edited undefined 8/14/2018, 8:04:05 PM
-product listed search 8/14/2018, 8:04:05 PM
-product listed app.css 8/14/2018, 8:04:06 PM
+Connected to gearhost DB...8/15/2018, 4:57:58 PM
+user created R 8/15/2018, 4:58:24 PM
