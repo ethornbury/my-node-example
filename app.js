@@ -205,9 +205,21 @@ app.get('/user/:id', function(req, res){
  console.log("Now you are on the edit user page!");
 });
 
+//edit the USER data from the form 
+app.get('/edit-user/:id', function(req, res){
+    let sql = 'SELECT * FROM users WHERE Id = "'+req.params.id+'";';
+     let query = db.query(sql, (err, res1) =>{
+             if(err) throw err;
+             console.log(res);
+       
+     wstream.write('\nuser edited ' + req.body.id + ' ' + new Date(Date.now()).toLocaleString());
+     res.render('edit-user', {root: VIEWS, res1});
+    });
+});
+
 //take the USER data from the form to the database
 app.post('/edit-user/:id', function(req, res){
-    let sql = 'UPDATE user SET Name = "'+req.body.fname+'", Surname = "'+req.body.lname+'",Email = "'+req.body.email+'", Password = "'+req.body.password+'" WHERE Id = "'+req.params.id+'";';
+    let sql = 'UPDATE users SET Fname = "'+req.body.newfname+'", Lname = "'+req.body.newlname+'",Email = "'+req.body.newemail+'", Password = "'+req.body.newpassword+'" WHERE Id = "'+req.params.id+'";';
         let query = db.query(sql, (err, res) =>{
              if(err) throw err;
              console.log(res);
