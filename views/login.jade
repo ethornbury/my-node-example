@@ -1,0 +1,18 @@
+extends layout
+block content
+     .row
+        .col-sm-1
+            
+        .col-sm-2
+            h3 Login here 
+        .col-sm-4
+                form(method="post" action="/login")
+                    .form-group
+                        label(for="Email") Email:
+                        input.form-control(name="email", type="text", placeholder="enter your email")
+                    .form-group
+                        label(for="Password") Password:
+                        input.form-control(name="password", type="password", placeholder="enter your password")
+                    button.btn.btn-default(type='submit') Login      
+                    
+        

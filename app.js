@@ -1,11 +1,16 @@
 // Standard set up for the express code to work with your code
-var express     = require('express');
+var express     = require('express'),
+  bodyParser  = require("body-parser"),
+  jade        = require('jade'),
+  fs          = require('fs'),      //file system, to access files like text, json, xml
+  http     = require('http'),
+  util     = require('util');
+
 var app         = express();
+  
 const path      = require('path');
 const VIEWS     = path.join(__dirname, 'views');
-var bodyParser  = require("body-parser");
-var jade        = require('jade');
-var fs          = require('fs');         //file system, to access files like text, json, xml
+
 app.set('view engine', 'jade');
 
 //var datetime = require('node.date-time');    //to get a current time stamp but did it the other way
@@ -191,6 +196,77 @@ app.get('/users', function(req, res){
   //console.log("Now you are on the products page! Session set as seen on products page " + req.session.email);
   console.log("Now you are on the users page! ");
 });
+
+//-----------------register a new user, login & logout
+// Render register page 
+app.get('/register', function(req, res){
+ 
+ res.render('register', {root:VIEWS});
+ 
+});
+
+// stick user into database 
+
+app.post('/register', function(req, res){
+  db.query('INSERT INTO users (Name, Email, Password) VALUES ("'+req.body.name+'", "'+req.body.email+'", "'+req.body.password+'")');
+  req.session.email =  "LoggedIn";   
+  // req.session.who =  req.body.name;
+  res.redirect('/');   
+});
+
+
+// Render login page 
+app.get('/login', function(req, res){
+ res.render('login', {root:VIEWS, title: 'Login'});
+});
+
+
+
+app.post('/login', function(req,res){
+  var whichOne = req.body.email; // What doe the user type in the name text box
+  var whichPass = req.body.password; // What doe the user type in the password text box
+  
+  let sql2 = 'Select email, password FROM users WHERE email = "'+req.body.email+'"';
+  let query = db.query(sql2, (err, res2) =>{
+    if(err){
+      res.redirect('/');
+      //throw(err);
+    }else{ 
+    
+      //console.log(res2);
+      var passx = res2[0].password;
+      var passxn = res2[0].email;
+      console.log(res2[0].password);
+      console.log(res2[0].email);
+      console.log(whichPass);
+      
+      req.session.email = "LoggedIn";
+      
+      if(passx == whichPass){
+        res.redirect("/products");
+        console.log("You Logged in as Password " + passx + " and username " + passxn );
+      }else{
+        res.redirect('/');
+        console.log("not logged in" );
+      }
+     
+    }
+ 
+  });
+});
+
+
+
+// Log Out Route 
+
+app.get('/logout', function(req, res){
+ res.render('index', {root:VIEWS});
+ req.session.destroy(session.email);
+ 
+})
+
+// end logout route 
+//-----------------------------------------
 
 
 //view a USER
