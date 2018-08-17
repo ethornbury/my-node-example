@@ -3,17 +3,20 @@ var express     = require('express'),
   bodyParser  = require("body-parser"),
   jade        = require('jade'),
   fs          = require('fs'),      //file system, to access files like text, json, xml
-  http     = require('http'),
+  http        = require('http'),
+  mysql       = require('mysql'),
+  flash       = require('express-flash'),
+  //expressValidator = require('express-validator'),
+  //validate = require('express-validation'),
   util     = require('util');
 
 var app         = express();
   
 const path      = require('path');
 const VIEWS     = path.join(__dirname, 'views');
-
 app.set('view engine', 'jade');
 
-//var datetime = require('node.date-time');    //to get a current time stamp but did it the other way
+
 console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
 var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
 wstream.write('Log file\n');
@@ -30,11 +33,11 @@ app.use(express.static("images"));   // allow the application to access the imag
 app.use(express.static("views"));    // Allow access to content of views folder
 app.use(express.static("models"));   // Allow access to content of models folder where JSON is
 app.use(express.static("views/user"));
-
+app.use(flash()); //to show alerts/messages in the view
+//app.use(expressValidator());
 app.use(bodyParser.urlencoded({extended:true})); //place in general that which uses it
 
 //my gearhost MYSQL db credentials to create a connection
-var mysql = require('mysql');
 const db = mysql.createConnection({
   host     : 'den1.mysql4.gear.host',
   user     : 'emernode',
@@ -66,6 +69,7 @@ app.get('/create-products-table', function(req, res) {
       });
     wstream.write('\nproduct table created on the db');
     res.send("Well done products table created...");
+    
 });
 
 
@@ -79,7 +83,7 @@ app.post('/new-product', function(req, res) {
     wstream.write('\nnew product added ' + req.body.name + " " + new Date(Date.now()).toLocaleString());
   });
   //res.send("Well done, new product created...");
-  res.redirect('/products'); // redirect to product funtion 
+  res.redirect('/products'); // redirect to product funtion so it will render the view with the row data 
   console.log("Now you are on the products page!");
 });
 
@@ -87,8 +91,8 @@ app.get('/products', function(req, res){
  let sql = 'SELECT * FROM products';
  let query = db.query(sql, (err, res1) => {
     if(err) throw err;
-    res.render('products.jade', {root: VIEWS, res1});
-    //res.send(res1); //showa table contents but needs style
+    res.render('products.jade', {root: VIEWS, res1, title: 'Products listing'});
+    //res.send(res1); //shows table contents but needs style
     console.log(res1);
      wstream.write('\nall product listing ' + new Date(Date.now()).toLocaleString());
   });
@@ -103,7 +107,7 @@ app.get('/item/:id', function(req, res){
  let sql = 'SELECT * FROM products WHERE Id = "'+req.params.id+'";';
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
-  res.render('item.jade', {root: VIEWS, res1}); // use the render command so that the response object renders a HHTML page
+  res.render('item.jade', {root: VIEWS, res1, title: 'Item view'}); // use the render command so that the response object renders a HHTML page
   wstream.write('\nproduct listed ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
  });
  console.log("Now you are on the Individual product page!");
@@ -116,7 +120,7 @@ app.get('/edit-product/:id', function(req, res){
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nproduct edit page ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.render('edit-product', {root: VIEWS, res1});// use the render command so that the response object renders a HHTML page
+  res.render('edit-product', {root: VIEWS, res1, title: 'Edit product'});// use the render command so that the response object renders a HHTML page
  });
  console.log("Now you are on the edit product page!");
 });
@@ -129,7 +133,7 @@ app.post('/edit-product/:id', function(req, res){
              console.log(res);
         });
         wstream.write('\nproduct edited ' + req.body.newname + ' ' + new Date(Date.now()).toLocaleString());
-    res.redirect("/item/" + req.params.id);
+    res.redirect("/item/" + req.params.id); //redirect to the item listing with the param
 });
 
 
@@ -139,7 +143,7 @@ app.get('/delete/:id', function(req, res){
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nproduct deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.redirect('/products'); // use the render command so that the response object renders a HHTML page
+  res.redirect('/products'); // use the redirect to go to that funtion which will then render the page with data
  });
  console.log("Its Gone!");
 });
@@ -150,7 +154,7 @@ app.post('/search', function(req, res){
  let query = db.query(sql, (err,res1) =>{
   if(err) throw(err);
  // res.redirect("/error")
-  res.render('products', {root: VIEWS, res1});
+  res.render('products', {root: VIEWS, res1, title: 'Products listing from search'});
   console.log("Search for " + "%'+req.body.search+'%");
   wstream.write("Search for " + "%'+req.body.search+'%" + " at " +  + new Date(Date.now()).toLocaleString());
  });
@@ -180,7 +184,7 @@ app.post('/new-user', function(req, res) {
     wstream.write('\nuser created ' + req.body.lname + ' ' + new Date(Date.now()).toLocaleString());
   });
   //res.send("Well done, new user created...");
-  res.render('index.jade', {root: VIEWS}); // use the render command so that the response object renders a HHTML page
+  res.render('index.jade', {root: VIEWS, title: 'Home', message: 'Hi new user'}); // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the home page!");
 });
 
@@ -199,19 +203,17 @@ app.get('/users', function(req, res){
 
 //-----------------register a new user, login & logout
 // Render register page 
-app.get('/register', function(req, res){
- 
- res.render('register', {root:VIEWS});
- 
+app.get('/new-user', function(req, res){
+ res.render('new-user', {root:VIEWS, title: 'Register'});
 });
 
 // stick user into database 
 
-app.post('/register', function(req, res){
+app.post('/new-user', function(req, res){
   db.query('INSERT INTO users (Name, Email, Password) VALUES ("'+req.body.name+'", "'+req.body.email+'", "'+req.body.password+'")');
   req.session.email =  "LoggedIn";   
   // req.session.who =  req.body.name;
-  res.redirect('/');   
+  res.redirect('/', {title: 'home', message: 'You are registered'});   
 });
 
 
@@ -227,9 +229,15 @@ app.post('/login', function(req,res){
   var whichPass = req.body.password; // What doe the user type in the password text box
   
   let sql2 = 'Select email, password FROM users WHERE email = "'+req.body.email+'"';
+  console.log(sql2[0].email);
   let query = db.query(sql2, (err, res2) =>{
-    if(err){
-      res.redirect('/');
+    if(res2[0].email != whichOne || res2[0].password != whichPass){
+    /*if(err){
+      console.log("error " , res2[0].password);
+      console.log("error " , res2[0].email);
+      console.log("error " , whichPass);
+      */
+      res.redirect('/', {messages: 'Login failed at the first hurdle'});
       //throw(err);
     }else{ 
     
@@ -246,7 +254,7 @@ app.post('/login', function(req,res){
         res.redirect("/products");
         console.log("You Logged in as Password " + passx + " and username " + passxn );
       }else{
-        res.redirect('/');
+        res.redirect('/', {messages: 'Login failed at second'});
         console.log("not logged in" );
       }
      
@@ -260,8 +268,9 @@ app.post('/login', function(req,res){
 // Log Out Route 
 
 app.get('/logout', function(req, res){
- res.render('index', {root:VIEWS});
+ res.render('index', {root:VIEWS,  messages: 'Logged out'});
  req.session.destroy(session.email);
+ console.log("logged out");
  
 })
 
@@ -289,7 +298,7 @@ app.get('/edit-user/:id', function(req, res){
              console.log(res);
        
      wstream.write('\nuser edited ' + req.body.id + ' ' + new Date(Date.now()).toLocaleString());
-     res.render('edit-user', {root: VIEWS, res1});
+     res.render('edit-user', {root: VIEWS, res1, title: 'Edit User'});
     });
 });
 
@@ -311,7 +320,7 @@ app.get('/delete-user/:id', function(req, res){
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nuser deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.redirect('/users'); // use the render command so that the response object renders a HHTML page
+  res.redirect('/users', {title: 'Users Listing', message: 'User deleted'}); // use the render command so that the response object renders a HHTML page
  });
  console.log("User Gone!");
 });
@@ -349,26 +358,26 @@ app.get('/', function(req, res){
 // function to render the products page
 app.get('/products', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
-  res.render('products.jade', {root: VIEWS}); // use the render command so that the response object renders as a HTML page
+  res.render('products.jade', {root: VIEWS, title: 'All Products'}); // use the render command so that the response object renders as a HTML page
   console.log("Now you are on the products page!");
 });
 
 // function to render the products page
 app.get('/new-product', function(req, res){
-  res.render('new-product.jade', {root: VIEWS});  // use the render command so that the response object renders a HHTML page
+  res.render('new-product.jade', {root: VIEWS, title: 'New Product'});  // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the new product page!");
 });
 
 // function to render the products page
 app.get('/new-user', function(req, res){
-  res.render('new-user.jade', {root: VIEWS}); // use the render command so that the response object renders a HHTML page
+  res.render('new-user.jade', {root: VIEWS, title: 'New User'}); // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the new user page!");
 });
 
 // function to render the users page
 app.get('/users', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
-  res.render('users.jade', {root: VIEWS}); // use the render command so that the response object renders as a HTML page
+  res.render('users.jade', {root: VIEWS, title: 'Users listing'}); // use the render command so that the response object renders as a HTML page
   console.log("Now you are on the users listing page!");
 });
 
@@ -382,5 +391,3 @@ app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
   wstream.write('\nExample app listening on port 8080, in c9 goto http://<workspace name>-<user name>.c9users.io');
 });
-
-//github testing

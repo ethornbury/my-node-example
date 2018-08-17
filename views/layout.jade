@@ -21,9 +21,13 @@ html
                     li
                         a(href='/products') Products
                     li
+                        a(href='/new-product') New Product
+                    li
                         a(href='/login') Login
                     li
-                        a(href='/new-product') New Product
+                        a(href='/new-user') Register
+                    li
+                        a(href='/logout') Logout
                     li
                         a(href='http://google.ie', target='_blank') Google
                     li.search
@@ -34,7 +38,8 @@ html
                 
         .main
             .container
-            
+            -if(messages > 0)
+                div.alert.alert-default #{messages}
             block content
         
         footer.footer
