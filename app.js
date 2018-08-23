@@ -100,7 +100,7 @@ app.get('/products', function(req, res){
  let sql = 'SELECT * FROM products';
  let query = db.query(sql, (err, res1) => {
     if(err) throw err;
-    res.render('products.jade', {root: VIEWS, res1, title: 'Products listing'});
+    res.render('products.jade', {root: VIEWS, res1, title: 'Products listing', messages: '   '});
     //res.send(res1); //shows table contents but needs style
     console.log(res1);
      wstream.write('\nall product listing ' + new Date(Date.now()).toLocaleString());
@@ -116,7 +116,7 @@ app.get('/item/:id', function(req, res){
  let sql = 'SELECT * FROM products WHERE Id = "'+req.params.id+'";';
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
-  res.render('item.jade', {root: VIEWS, res1, title: 'Item view'}); // use the render command so that the response object renders a HHTML page
+  res.render('item.jade', {root: VIEWS, res1, title: 'Item view', messages: '   '}); // use the render command so that the response object renders a HHTML page
   wstream.write('\nproduct listed ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
  });
  console.log("Now you are on the Individual product page!");
@@ -129,7 +129,7 @@ app.get('/edit-product/:id', function(req, res){
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nproduct edit page ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.render('edit-product', {root: VIEWS, res1, title: 'Edit product'});// use the render command so that the response object renders a HHTML page
+  res.render('edit-product', {root: VIEWS, res1, title: 'Edit product', messages: '   '});// use the render command so that the response object renders a HHTML page
  });
  console.log("Now you are on the edit product page!");
 });
@@ -163,7 +163,7 @@ app.post('/search', function(req, res){
  let query = db.query(sql, (err,res1) =>{
   if(err) throw(err);
  // res.redirect("/error")
-  res.render('products', {root: VIEWS, res1, title: 'Products listing from search'});
+  res.render('products', {root: VIEWS, res1, title: 'Products listing from search', messages: '   '});
   console.log("Search for " + "%'+req.body.search+'%");
   wstream.write("Search for " + "%'+req.body.search+'%" + " at " +  + new Date(Date.now()).toLocaleString());
  });
@@ -193,7 +193,7 @@ app.post('/new-user', function(req, res) {
     wstream.write('\nuser created ' + req.body.lname + ' ' + new Date(Date.now()).toLocaleString());
   });
   //res.send("Well done, new user created...");
-  res.render('index.jade', {root: VIEWS, title: 'Home', message: 'Hi new user'}); // use the render command so that the response object renders a HHTML page
+  res.render('index.jade', {root: VIEWS, title: 'Home', messages: 'Hi new user'}); // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the home page!");
 });
 
@@ -201,7 +201,7 @@ app.get('/users', function(req, res){
  let sql = 'SELECT * FROM users';
  let query = db.query(sql, (err, res1) => {
     if(err) throw err;
-    res.render('users.jade', {root: VIEWS, res1});
+    res.render('users.jade', {root: VIEWS, res1, messages: '   '});
     //res.send(res1); //showa table contents but needs style
     console.log(res1);
      wstream.write('\nall users listing ' + new Date(Date.now()).toLocaleString());
@@ -222,7 +222,7 @@ app.post('/new-user', function(req, res){
   db.query('INSERT INTO users (Name, Email, Password) VALUES ("'+req.body.name+'", "'+req.body.email+'", "'+req.body.password+'")');
   req.session.email =  "LoggedIn";   
   // req.session.who =  req.body.name;
-  res.redirect('/', {title: 'home', message: 'You are registered'});   
+  res.render('/', {root:VIEWS, title: 'home', messages: 'You are registered'});   
 });
 
 
@@ -246,22 +246,27 @@ app.post('/login', function(req,res){
 		// console.log('The solution is: ', results);
 		if(results.length >0){
 		  if(results[0].password == password){
-			res.send({
-			  "code":200,
-			  "success":"login sucessfull"
-				});
+		   res.render('index', {root:VIEWS,  messages: 'Login successful'});
+			  //res.send({
+			  //"code":200,
+			  //"success":"login sucessfull"
+				//});
+				
 		  }else{
-			res.send({
-			  "code":204,
-			  "success":"Email and password does not match"
-				});
+		    res.render('index', {root:VIEWS,  messages: 'Email and password do not match'});
+			 //res.send({
+			  
+			  //"code":204,
+			  //"success":"Email and password does not match"
+				//});
 		  }
 		}
 		else{
-		  res.send({
-			"code":204,
-			"success":"Email does not exits"
-			  });
+		 res.render('index', {root:VIEWS,  messages: 'Email does not exist'});
+		 // res.send({
+			//"code":204,
+		//	"success":"Email does not exits"
+		//	  });
 		}
   }
   }); //end db.query
@@ -323,7 +328,7 @@ app.get('/delete-user/:id', function(req, res){
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nuser deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.render('index.jad', {root: VIEWS, message: 'User deleted'}); // use the render command so that the response object renders a HHTML page
+  res.render('index.jade', {root: VIEWS, messages: 'User deleted'}); // use the render command so that the response object renders a HHTML page
  });
  console.log("User Gone!");
 });
@@ -354,33 +359,33 @@ in the "/" directory, create a dynamic html and send that back
 app.get('/', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
  //res.send("<h1>hello world</h1>"); //it will pring this onscreen
-  res.render('index.jade', {root: VIEWS, title: 'Homepage'}); //render() will show the .jade as HTML
+  res.render('index.jade', {root: VIEWS, title: 'Homepage', messages: '  '}); //render() will show the .jade as HTML
   console.log("Now you are on the home page!");
 });
 
 // function to render the products page
 app.get('/products', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
-  res.render('products.jade', {root: VIEWS, title: 'All Products'}); // use the render command so that the response object renders as a HTML page
+  res.render('products', {root: VIEWS, title: 'All Products', messages: '   '}); // use the render command so that the response object renders as a HTML page
   console.log("Now you are on the products page!");
 });
 
 // function to render the products page
 app.get('/new-product', function(req, res){
-  res.render('new-product.jade', {root: VIEWS, title: 'New Product'});  // use the render command so that the response object renders a HHTML page
+  res.render('new-product.jade', {root: VIEWS, title: 'New Product', messages: '   '});  // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the new product page!");
 });
 
 // function to render the products page
 app.get('/new-user', function(req, res){
-  res.render('new-user.jade', {root: VIEWS, title: 'New User'}); // use the render command so that the response object renders a HHTML page
+  res.render('new-user.jade', {root: VIEWS, title: 'New User', messages: '   '}); // use the render command so that the response object renders a HHTML page
   console.log("Now you are on the new user page!");
 });
 
 // function to render the users page
 app.get('/users', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
-  res.render('users.jade', {root: VIEWS, title: 'Users listing'}); // use the render command so that the response object renders as a HTML page
+  res.render('users.jade', {root: VIEWS, title: 'Users listing', messages: '    '}); // use the render command so that the response object renders as a HTML page
   console.log("Now you are on the users listing page!");
 });
 
