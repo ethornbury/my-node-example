@@ -9,10 +9,11 @@ block content
                 form(method="post" action="/login")
                     .form-group
                         label(for="Email") Email:
-                        input.form-control(name="email", type="text", placeholder="enter your email")
+                        input.form-control(name="email", type='text', onfocus="this.value=''", placeholder='enter your email')
+                        //input.form-control(name="email", type="text", placeholder="enter your email")
                     .form-group
                         label(for="Password") Password:
-                        input.form-control(name="password", type="password", placeholder="enter your password")
+                        input.form-control(name="password", type="password", onfocus="this.value=''", placeholder="enter your password")
                     button.btn.btn-default(type='submit') Login      
                     
         

@@ -46,7 +46,8 @@ const db = mysql.createConnection({
 });
 
 //Using the db above to connect to gearhost db
-db.connect((err) => {
+/*
+db2.connect((err) => {
   if(err){
     //throw err;
     console.log("db connect broke", err);
@@ -57,7 +58,15 @@ db.connect((err) => {
     //console.log(new Date().format("d-M-Y"));  date stamp
   }
 });
+*/
 
+db.connect(function (err){
+ if(!err){
+  console.log("DB connected");
+ }else{
+  console.log("Error connected DB");
+ }
+});
 
 // SQL create product table Example
 app.get('/create-products-table', function(req, res) {
@@ -223,45 +232,40 @@ app.get('/login', function(req, res){
 });
 
 
-
 app.post('/login', function(req,res){
-  var whichOne = req.body.email; // What doe the user type in the name text box
-  var whichPass = req.body.password; // What doe the user type in the password text box
-  
-  let sql2 = 'Select email, password FROM users WHERE email = "'+req.body.email+'"';
-  console.log(sql2[0].email);
-  let query = db.query(sql2, (err, res2) =>{
-    if(res2[0].email != whichOne || res2[0].password != whichPass){
-    /*if(err){
-      console.log("error " , res2[0].password);
-      console.log("error " , res2[0].email);
-      console.log("error " , whichPass);
-      */
-      res.redirect('/', {messages: 'Login failed at the first hurdle'});
-      //throw(err);
-    }else{ 
-    
-      //console.log(res2);
-      var passx = res2[0].password;
-      var passxn = res2[0].email;
-      console.log(res2[0].password);
-      console.log(res2[0].email);
-      console.log(whichPass);
-      
-      req.session.email = "LoggedIn";
-      
-      if(passx == whichPass){
-        res.redirect("/products");
-        console.log("You Logged in as Password " + passx + " and username " + passxn );
-      }else{
-        res.redirect('/', {messages: 'Login failed at second'});
-        console.log("not logged in" );
-      }
-     
-    }
- 
-  });
-});
+ var email= req.body.email;
+ var password = req.body.password;
+ db.query('SELECT email, password FROM users WHERE email = ?',[email], function (error, results, fields) {
+  if (error) {
+		// console.log("error ocurred",error);
+		res.send({
+		  "code":400,
+		  "failed":"error ocurred"
+		})
+  }else{
+		// console.log('The solution is: ', results);
+		if(results.length >0){
+		  if(results[0].password == password){
+			res.send({
+			  "code":200,
+			  "success":"login sucessfull"
+				});
+		  }else{
+			res.send({
+			  "code":204,
+			  "success":"Email and password does not match"
+				});
+		  }
+		}
+		else{
+		  res.send({
+			"code":204,
+			"success":"Email does not exits"
+			  });
+		}
+  }
+  }); //end db.query
+}); //end function
 
 
 
@@ -271,8 +275,7 @@ app.get('/logout', function(req, res){
  res.render('index', {root:VIEWS,  messages: 'Logged out'});
  req.session.destroy(session.email);
  console.log("logged out");
- 
-})
+});
 
 // end logout route 
 //-----------------------------------------
@@ -320,7 +323,7 @@ app.get('/delete-user/:id', function(req, res){
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   wstream.write('\nuser deleted ' + req.params.id + ' ' + new Date(Date.now()).toLocaleString());
-  res.redirect('/users', {title: 'Users Listing', message: 'User deleted'}); // use the render command so that the response object renders a HHTML page
+  res.render('index.jad', {root: VIEWS, message: 'User deleted'}); // use the render command so that the response object renders a HHTML page
  });
  console.log("User Gone!");
 });
