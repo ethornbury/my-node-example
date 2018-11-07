@@ -1,5 +1,4 @@
 Log file
 
 Example app listening on port 8080, in c9 goto http://<workspace name>-<user name>.c9users.io
-all users listing 8/23/2018, 6:52:49 PM
-all product listing 8/23/2018, 6:53:39 PM
+all product listing 11/7/2018, 3:01:19 PM

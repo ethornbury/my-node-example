@@ -1,0 +1,61 @@
+This file is how to call sql queries place it in the application as needed
+
+
+// SQL create table Example
+app.get('/create', function(req, res) {
+  let sql = 'CREATE TABLE items ( Id int, Name varchar(255), Price varchar(255));'
+  let query = db.query(sql, (err, res) => {
+    if(err) throw err;
+    console.log(res);
+  });
+  res.send("Well done liam...");
+  });
+// End SQL create table Example
+
+// SQL Select Example
+app.get('/select', function(req, res) {
+  let sql = 'SELECT * FROM items'
+  let query = db.query(sql, (err, res) => {
+    if(err) throw err;
+    console.log(res);
+  });
+  res.send("Well done liam...");
+  });
+// End SQL Select Example
+
+
+// SQL Insert Example
+app.get('/insert', function(req, res) {
+  let sql = 'INSERT INTO items (Name, Price) VALUES ("Louise", 38)'
+  let query = db.query(sql, (err, res) => {
+    if(err) throw err;
+    console.log(res);
+  });
+  res.send("Well done liam...");
+  });
+// End SQL Insert Example
+
+
+// SQL Update Example
+app.get('/update', function(req, res) {
+  let sql = 'UPDATE items SET Name = "Item2" WHERE Id = 2'
+  let query = db.query(sql, (err, res) => {
+    if(err) throw err;
+    console.log(res);
+  });
+  res.send("Update Achieved...");
+  });
+// End SQL Insert Example
+
+
+// SQL delete Example
+app.get('/delete', function(req, res) {
+  let sql = 'DELETE FROM items WHERE Id = 2;'
+  let query = db.query(sql, (err, res) => {
+    if(err) throw err;
+    console.log(res);
+  });
+  res.send("We have deleted this now...");
+  });
+
+// End SQL Insert Example

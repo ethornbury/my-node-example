@@ -1,13 +1,28 @@
 [
     {
-        "name": "Class",
+        "name": "Class of 2016",
         "content": "Nothing like editing JSON!",
         "id": 1
     },
     {
         "name": "Liam",
-        "content": "Review on Monday ",
+        "content": "Great stuff! ",
         "id": 2
+    },
+    {
+        "name": "Joe",
+        "content": "Like the display",
+        "id": 3
+    },
+    {
+        "name": "Ann",
+        "content": "Clean and crisp",
+        "id": 4
+    },
+    {
+        "name": "Mrs Doyle",
+        "content": "Not my cup of tea",
+        "id": 5
     }
 ]
 

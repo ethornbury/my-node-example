@@ -21,3 +21,10 @@ block content
                   a(href="/delete/#{row.Id}") 
                     button(type="button") Delete #{row.Name}
                   hr
+        .col-sm-4
+            .grid-container
+                h3 Here are the reviews of our website!
+                each review in reviews
+                 .item
+                  h4 #{review.name} says:
+                  p #{review.content}

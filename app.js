@@ -21,6 +21,7 @@ console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing b
 var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
 wstream.write('Log file\n');
 //wstream.end();
+var reviews = require("./models/reviews.json")
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -100,7 +101,8 @@ app.get('/products', function(req, res){
  let sql = 'SELECT * FROM products';
  let query = db.query(sql, (err, res1) => {
     if(err) throw err;
-    res.render('products.jade', {root: VIEWS, res1, title: 'Products listing', messages: '   '});
+    res.render('products.jade', {root: VIEWS, res1, reviews, title: 'Products listing', messages: '   '});
+    
     //res.send(res1); //shows table contents but needs style
     console.log(res1);
      wstream.write('\nall product listing ' + new Date(Date.now()).toLocaleString());
