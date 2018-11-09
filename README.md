@@ -27,9 +27,9 @@ To set up the environment
 
 	$ npm install node.date-time //so I can use a timestamp in the log file
 	
-	& npm install connect-flash
+	$ npm install connect-flash
 	
-	& npm install express-flash -save
+	$ npm install express-flash -save
 	
 	$ npm install express-session -save
 	

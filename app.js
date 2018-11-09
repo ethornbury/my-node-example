@@ -105,7 +105,7 @@ app.get('/products', function(req, res){
     
     //res.send(res1); //shows table contents but needs style
     console.log(res1);
-     wstream.write('\nall product listing ' + new Date(Date.now()).toLocaleString());
+     wstream.write('\nall product listing and JSON reviews display' + new Date(Date.now()).toLocaleString());
   });
   //console.log("Now you are on the products page! Session set as seen on products page " + req.session.email);
   console.log("Now you are on the products page! ");
