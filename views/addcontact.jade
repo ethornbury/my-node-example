@@ -1,0 +1,27 @@
+extends layout
+block content
+     .row
+        .col-sm-1
+            
+        .col-sm-2
+            h3 Contact Us 
+        .col-sm-4
+          .grid-container
+            form(method="post")
+              fieldset
+                label(for="name") Your name: &nbsp;
+                input(name="name", type="text", placeholder="Enter your name")
+                br
+                br
+                label(for="email") Your email: &nbsp;
+                input(name="email", type="text", placeholder="Enter your email" )
+                br 
+                br
+                label(for="comment") Your message: &nbsp;
+                input(name="comment", type="text", placeholder="Enter your comment" )
+                br
+                br
+                button.button(type="submit") Contact us
+                
+                
+            hr

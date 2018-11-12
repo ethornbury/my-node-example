@@ -1,6 +1,6 @@
 // Standard set up for the express code to work with your code
 var express     = require('express'),
-  bodyParser  = require("body-parser"),
+  bodyParser  = require("body-parser"), //allows data to be passed through the body to other places
   jade        = require('jade'),
   fs          = require('fs'),      //file system, to access files like text, json, xml
   http        = require('http'),
@@ -21,7 +21,9 @@ console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing b
 var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
 wstream.write('Log file\n');
 //wstream.end();
+
 var reviews = require("./models/reviews.json")
+var contact = require("./models/contact.json")
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -37,6 +39,7 @@ app.use(express.static("views/user"));
 app.use(flash()); //to show alerts/messages in the view
 //app.use(expressValidator());
 app.use(bodyParser.urlencoded({extended:true})); //place in general that which uses it
+
 
 //my gearhost MYSQL db credentials to create a connection
 const db = mysql.createConnection({
@@ -390,6 +393,62 @@ app.get('/users', function(req, res){
   res.render('users.jade', {root: VIEWS, title: 'Users listing', messages: '    '}); // use the render command so that the response object renders as a HTML page
   console.log("Now you are on the users listing page!");
 });
+
+
+
+app.get('/contactus', function(req, res){
+  res.render('addcontact', {root:VIEWS});
+  console.log("You are on the contact page");
+  
+});
+
+//this request will send data to the json file in the model
+app.post('/contactus', function(req, res){
+  var count = Object.keys(contact).length;
+  console.log(count);
+  
+  //res.render('contact', {root:VIEWS});
+  var max
+  //standard javajscript function to get max id in json file and new one will be +1
+  function getMax(contacts, id){
+    //var max
+    for(var i=0; i<contacts.length; i++){
+      if(!max || parseInt(contact[i][id]) > parseInt(max[id]))
+        max = contacts[i];
+    }
+    return max;
+  }
+  var maxPpg = getMax(contact, "id"); //call the above function and passes the result to a var called maxCid
+  var newId = maxPpg.id + 1;
+  console.log(newId);
+  var formData = {
+   id: newId,
+   name: req.body.name,
+   email: req.body.email,
+   comment: req.body.comment
+  };
+  console.log(formData);
+  
+  //steps - stringify json, push new code, splice it and add new element, structure it back to json again
+  var json = JSON.stringify(contact); //stringify JSON data, convert to string
+  //function reads new data and pushes it to json file
+  fs.readFile('./models/contact.json', 'utf8', function readFileCallback(err, data){
+   if(err){
+     throw(err); //means it will stop and throw full err code in console
+     //res.redirect("/oops"); //if error send them to a page
+   }else{
+     
+     contact.push(formData); //send data to json file
+     json = JSON.stringify(contact, null, 4); //converts to a json file, null and 4 represent how it is structured or styled
+     // the 4 is the indentation, so not just a long line of code
+     fs. writeFile('./models/contact.json', json, 'utf8');
+   }
+  });
+  //res.redirect("/thanks");
+  res.render('thanks', {root:VIEWS});
+  
+});
+
 
 /*
 Firing up your server. For most of us noobs - all that matters here is

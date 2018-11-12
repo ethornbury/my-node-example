@@ -19,13 +19,13 @@ To set up the environment
 
 	$ npm install express --save
 	
-	$ npm install mysql --save // as I am using a mysql DB
+	$ npm install mysql --save  //as I am using a mysql DB
 
 	$ npm install jade //to use jade in your app
 
-	$ npm install body-parser
+	$ npm install body-parser --save
 
-	$ npm install node.date-time //so I can use a timestamp in the log file
+	$ npm install node.date-time  //so I can use a timestamp in the log file
 	
 	$ npm install connect-flash
 	
