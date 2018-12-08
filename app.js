@@ -16,6 +16,7 @@ const path      = require('path');
 const VIEWS     = path.join(__dirname, 'views');
 app.set('view engine', 'jade');
 
+require('dotenv').config();
 
 console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
 var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
@@ -43,39 +44,30 @@ app.use(bodyParser.urlencoded({extended:true})); //place in general that which u
 
 //my gearhost MYSQL db credentials to create a connection
 const db = mysql.createConnection({
-  host     : 'den1.mysql4.gear.host',
-  user     : 'emernode',
-  password : 'Jt55Wlv-2a2-',
-  database : 'emernode'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+  //database : 'emernode'
+    database: process.env.DB_NAME
 });
 
-//Using the db above to connect to gearhost db
-/*
-db2.connect((err) => {
-  if(err){
-    //throw err;
-    console.log("db connect broke", err);
-    wstream.write('error connecting to gearhost db');
-  }else{
-    console.log("Connected to gearhost DB...");
-    wstream.write('\nConnected to gearhost DB...' + new Date(Date.now()).toLocaleString());
-    //console.log(new Date().format("d-M-Y"));  date stamp
-  }
-});
-*/
 
 db.connect(function (err){
  if(!err){
   console.log("DB connected");
+  wstream.write('\nConnected to gearhost DB...');
  }else{
   console.log("Error connected DB");
+  wstream.write('\nerror connecting to gearhost db');
  }
 });
+
+global.product_id;
 
 // SQL create product table Example
 app.get('/create-products-table', function(req, res) {
   //let sql = 'DROP TABLE products;'
-  let sql = 'CREATE TABLE products ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Name varchar(255), Price int, Image varchar(255), Activity varchar(255));';
+  let sql = 'CREATE TABLE products ( Id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Name varchar(255), Price decimal(5, 2), Image varchar(255), Activity varchar(255));';
     let query = db.query(sql, (err, res) => {
       if(err) throw err;
        console.log(res);
@@ -115,10 +107,11 @@ app.get('/products', function(req, res){
 });
 
 
-// function to render the individual products page
+// function to render the individual products page {user: req.user,} 
 app.get('/item/:id', function(req, res){
  // res.send("Hello cruel world!"); // This is commented out to allow the index view to be rendered
  let sql = 'SELECT * FROM products WHERE Id = "'+req.params.id+'";';
+ global.product_id = req.params.id;
  let query = db.query(sql, (err, res1) =>{
   if(err) throw(err);
   res.render('item.jade', {root: VIEWS, res1, title: 'Item view', messages: '   '}); // use the render command so that the response object renders a HHTML page
@@ -137,6 +130,12 @@ app.get('/edit-product/:id', function(req, res){
   res.render('edit-product', {root: VIEWS, res1, title: 'Edit product', messages: '   '});// use the render command so that the response object renders a HHTML page
  });
  console.log("Now you are on the edit product page!");
+});
+
+app.get('/random', function(res) {
+    
+    res.render('random.jade', global.product_id);
+    console.log("on random page "+ global.product_id);
 });
 
 //take the data from the form to the database
@@ -192,6 +191,7 @@ app.get('/create-users-table', function(req, res) {
 //taking data from a form in the views - post request
 app.post('/new-user', function(req, res) {
   let sql = 'INSERT INTO users ( Fname, Lname, Email, Password) VALUES ("'+req.body.fname+'", "'+req.body.lname+'", "'+req.body.email+'", "'+req.body.password+'")';
+  let user_
   let query = db.query(sql, (err, res) => {
     if(err) throw err;
     console.log(res);
