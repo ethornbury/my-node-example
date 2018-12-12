@@ -16,7 +16,7 @@ const path      = require('path');
 const VIEWS     = path.join(__dirname, 'views');
 app.set('view engine', 'jade');
 
-require('dotenv').config();
+require('dotenv').config(); //for creating environment variables in the .env file used for DB connection
 
 console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
 var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
@@ -42,7 +42,9 @@ app.use(flash()); //to show alerts/messages in the view
 app.use(bodyParser.urlencoded({extended:true})); //place in general that which uses it
 
 
-//my gearhost MYSQL db credentials to create a connection
+//my gearhost MYSQL db credentials to create a connection.
+//using https://codeburst.io/how-to-easily-set-up-node-environment-variables-in-your-js-application-d06740f9b9bd
+//to create a gitignore to secure my DB credentials which are environment variables
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
