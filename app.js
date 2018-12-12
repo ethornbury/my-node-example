@@ -465,4 +465,4 @@ b) the console statement is just a note to tell you the server is running
 
 var port = process.env.PORT || 3000;
 app.listen(port);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+//console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

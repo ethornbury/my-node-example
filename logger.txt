@@ -1,4 +1,4 @@
 Log file
 
-Example app listening on port 8080, in c9 goto http://<workspace name>-<user name>.c9users.io
 Connected to gearhost DB...
+all product listing and JSON reviews display12/12/2018, 7:38:14 PM
