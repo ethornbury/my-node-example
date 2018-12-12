@@ -29,7 +29,11 @@ var contact = require("./models/contact.json")
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
-app.use(session({ secret: "topsecret" })); // Requird to make the session accessable throughouty the application
+app.use(session({ 
+  secret: "topsecret",
+  resave: true,
+  saveUninitialized: true
+})); // Requird to make the session accessable throughouty the application
 
 
 app.use(express.static("scripts"));  // allow the application to access the scripts folder contents to use in the application

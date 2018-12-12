@@ -1,4 +1,6 @@
 Log file
 
 Connected to gearhost DB...
-all product listing and JSON reviews display12/12/2018, 7:38:14 PM
+all product listing and JSON reviews display12/12/2018, 8:01:16 PM
+new product added Nuts 12/12/2018, 8:01:52 PM
+all product listing and JSON reviews display12/12/2018, 8:01:52 PM
