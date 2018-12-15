@@ -1,0 +1,10 @@
+Log file
+
+Connected to gearhost DB...
+all product listing and JSON reviews display12/15/2018, 12:09:56 PM
+product listed 1 12/15/2018, 12:09:58 PM
+product listed app.css 12/15/2018, 12:09:58 PM
+all product listing and JSON reviews display12/15/2018, 12:09:59 PM
+product listed 2 12/15/2018, 12:10:01 PM
+product listed app.css 12/15/2018, 12:10:01 PM
+all product listing and JSON reviews display12/15/2018, 12:10:03 PM

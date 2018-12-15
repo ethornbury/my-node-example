@@ -19,12 +19,13 @@ app.set('view engine', 'jade');
 require('dotenv').config(); //for creating environment variables in the .env file used for DB connection
 
 console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
-var wstream = fs.createWriteStream('logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
+var wstream = fs.createWriteStream('./logs/logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
 wstream.write('Log file\n');
 //wstream.end();
 
 var reviews = require("./models/reviews.json")
 var contact = require("./models/contact.json")
+var logger = require("./logs/logger.txt")
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -53,7 +54,6 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-  //database : 'emernode'
     database: process.env.DB_NAME
 });
 
@@ -138,10 +138,11 @@ app.get('/edit-product/:id', function(req, res){
  console.log("Now you are on the edit product page!");
 });
 
-app.get('/random', function(res) {
-    
-    res.render('random.jade', global.product_id);
-    console.log("on random page "+ global.product_id);
+//print log files from server to page
+app.get('/random', function(req, res) {
+    let  logdata = fs.readFileSync('./logs/logger.txt');
+    res.render('random.jade', {root: VIEWS, res, logdata , title: 'Random', messages: '   '});
+    console.log("on random page ", logdata);
 });
 
 //take the data from the form to the database

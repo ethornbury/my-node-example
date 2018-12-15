@@ -4,7 +4,8 @@ block content
         .col-sm-1
             
         .col-sm-2
-            h3 View product id passed #{product_id}!
+            h3 Displaying the contents of the logger.txt
         .col-sm-4
           .grid-container
-            h3 #{product_id}
+            each row in logdata
+              p #{row}
