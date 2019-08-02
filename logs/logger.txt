@@ -1,9 +1,3 @@
-Log file
+Log file opened
 
 Connected to gearhost DB...
-product listed 1 4/27/2019, 10:38:21 AM
-product listed app.css 4/27/2019, 10:38:22 AM
-all product listing and JSON reviews display4/27/2019, 10:38:25 AMSearch for %'+req.body.search+'% at NaN
-all product listing and JSON reviews display4/27/2019, 10:39:09 AMSearch for %'+req.body.search+'% at NaN
-product listed 1 4/27/2019, 10:39:46 AM
-product listed app.css 4/27/2019, 10:39:47 AM

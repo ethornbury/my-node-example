@@ -53,3 +53,4 @@ Functionality includes:
 - Uses a view engine with block content
 - log file of activity created
 
+Global variables held in the .env file. Which is set to be ignored in the .gitignore file. 

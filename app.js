@@ -20,7 +20,7 @@ require('dotenv').config(); //for creating environment variables in the .env fil
 
 console.log('current: ' + new Date(Date.now()).toLocaleString());    //testing by sending current timestamp to console
 var wstream = fs.createWriteStream('./logs/logger.txt');    //create a log of activity with current timestamp in a file called logger.txt
-wstream.write('Log file\n');
+wstream.write('Log file opened\n');
 //wstream.end();
 
 var reviews = require("./models/reviews.json")
